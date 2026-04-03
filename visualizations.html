@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Visualizations | Manish Chowdary Gorantla</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a class="brand" href="index.html">MANISH CHOWDARY GORANTLA</a>
+        <nav aria-label="Main navigation">
+          <ul class="nav-links">
+            <li><a href="about.html">About</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="experience.html">Experience</a></li>
+            <li><a class="active" href="visualizations.html">Visualizations</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="section container">
+      <h1>Data Visualizations</h1>
+      <p class="section-intro">Sample portfolio dashboards reflecting healthcare, engineering, and model performance storytelling.</p>
+
+      <div class="viz-grid">
+        <section class="card">
+          <h2>Model Performance (Fraud Detection)</h2>
+          <canvas id="modelChart" aria-label="Model performance chart"></canvas>
+        </section>
+        <section class="card">
+          <h2>Patient Engagement Trend</h2>
+          <canvas id="engagementChart" aria-label="Patient engagement chart"></canvas>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer"><div class="container"><p>© <span id="year"></span> Manish Chowdary Gorantla</p></div></footer>
+    <script src="script.js"></script>
+  </body>
+</html>
