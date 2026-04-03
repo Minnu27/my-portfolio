@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact | Manish Chowdary Gorantla</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a class="brand" href="index.html">MANISH CHOWDARY GORANTLA</a>
+        <nav aria-label="Main navigation">
+          <ul class="nav-links">
+            <li><a href="about.html">About</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="experience.html">Experience</a></li>
+            <li><a href="visualizations.html">Visualizations</a></li>
+            <li><a class="active" href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="section container">
+      <h1>Contact</h1>
+      <div class="list-card">
+        <p><strong>Email:</strong> manishchowdary@pace.edu</p>
+        <p><strong>Phone:</strong> +1 646-630-6065</p>
+        <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/manishchowdary" target="_blank" rel="noreferrer">linkedin.com/in/manishchowdary</a></p>
+        <p><strong>GitHub:</strong> <a href="https://github.com/Manishchowdary" target="_blank" rel="noreferrer">github.com/Manishchowdary</a></p>
+      </div>
+
+      <form class="contact-form">
+        <label>Name <input type="text" name="name" required /></label>
+        <label>Email <input type="email" name="email" required /></label>
+        <label>Message <textarea name="message" rows="5" required></textarea></label>
+        <button type="submit" class="btn btn-primary">Send</button>
+        <p class="form-note" role="status" aria-live="polite"></p>
+      </form>
+    </main>
+
+    <footer class="site-footer"><div class="container"><p>© <span id="year"></span> Manish Chowdary Gorantla</p></div></footer>
+    <script src="script.js"></script>
+  </body>
+</html>
