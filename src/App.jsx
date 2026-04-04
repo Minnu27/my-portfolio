@@ -1,6 +1,19 @@
 import { useMemo, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts'
+import {
+  RadarChart,
+  Radar,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid
+} from 'recharts'
 
 const navItems = ['Hero', 'About', 'Skills', 'Projects', 'Experience', 'Education', 'Contact']
 
@@ -38,11 +51,62 @@ const barData = [
 ]
 
 const projects = [
-  { title: 'Streaming Data Lakehouse', tag: 'Python', tech: ['Kafka', 'Spark', 'Delta Lake'] },
-  { title: 'Customer 360 Dashboard', tag: 'React', tech: ['React', 'Recharts', 'REST API'] },
-  { title: 'Workflow Automation Platform', tag: 'Node.js', tech: ['Node.js', 'Airflow', 'PostgreSQL'] },
-  { title: 'Forecasting & Anomaly Detection', tag: 'Python', tech: ['Python', 'Prophet', 'Scikit-learn'] },
-  { title: 'Portfolio Web App', tag: 'React', tech: ['React', 'Framer Motion', 'Tailwind'] }
+  {
+    title: 'Cloud ETL Migration & Validation Framework',
+    tag: 'Data Engineering',
+    tech: ['Python', 'SQL', 'AWS Glue', 'Great Expectations'],
+    impact: 'Reduced release defects by 37% with automated reconciliation checks.',
+    repo: 'https://github.com/Manishchowdary/cloud-etl-migration-validation'
+  },
+  {
+    title: 'Flood Prediction using Machine Learning',
+    tag: 'Machine Learning',
+    tech: ['Python', 'Scikit-learn', 'Pandas', 'Matplotlib'],
+    impact: 'Improved flood-risk classification quality with feature-engineered training pipelines.',
+    repo: 'https://github.com/Manishchowdary/flood-prediction-ml'
+  },
+  {
+    title: 'Healthcare Record Portal Analytics',
+    tag: 'Analytics',
+    tech: ['Tableau', 'SQL', 'Excel', 'Python'],
+    impact: 'Created adoption dashboards used by providers to improve patient engagement.',
+    repo: 'https://github.com/Manishchowdary/healthcare-record-analytics'
+  },
+  {
+    title: 'Streaming Data Lakehouse',
+    tag: 'Data Engineering',
+    tech: ['Kafka', 'Spark', 'Delta Lake'],
+    impact: 'Enabled near real-time reporting with reliable CDC ingestion.',
+    repo: 'https://github.com/Manishchowdary/streaming-data-lakehouse'
+  },
+  {
+    title: 'Customer 360 Dashboard',
+    tag: 'Frontend + Analytics',
+    tech: ['React', 'Recharts', 'REST API'],
+    impact: 'Unified metrics from multiple systems into a single customer health view.',
+    repo: 'https://github.com/Manishchowdary/customer-360-dashboard'
+  },
+  {
+    title: 'Workflow Automation Platform',
+    tag: 'Data Engineering',
+    tech: ['Node.js', 'Airflow', 'PostgreSQL'],
+    impact: 'Automated recurring workflows and cut manual task time by 60%.',
+    repo: 'https://github.com/Manishchowdary/workflow-automation-platform'
+  },
+  {
+    title: 'Forecasting & Anomaly Detection',
+    tag: 'Machine Learning',
+    tech: ['Python', 'Prophet', 'Scikit-learn'],
+    impact: 'Shipped anomaly alerts for operational KPIs with daily retraining.',
+    repo: 'https://github.com/Manishchowdary/forecasting-anomaly-detection'
+  },
+  {
+    title: 'Portfolio Web App',
+    tag: 'Frontend + Analytics',
+    tech: ['React', 'Framer Motion', 'Tailwind'],
+    impact: 'Built a high-performance portfolio with interactive data visuals.',
+    repo: 'https://github.com/Manishchowdary/my-portfolio'
+  }
 ]
 
 const experience = [
@@ -73,17 +137,18 @@ export default function App() {
     return () => obs.disconnect()
   }, [])
 
+  const projectTags = useMemo(() => ['All', ...new Set(projects.map((project) => project.tag))], [])
   const filteredProjects = useMemo(() => (filter === 'All' ? projects : projects.filter((p) => p.tag === filter)), [filter])
 
   return (
-    <div className="bg-[#0a0a0a] text-white">
+    <div className="bg-[#07070f] text-white aurora-bg">
       <nav className="fixed top-0 z-50 w-full glass">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <a href="#Hero" className="font-bold text-[#6c63ff]">Manish</a>
+          <a href="#Hero" className="font-bold text-[#8f88ff]">Manish</a>
           <button className="md:hidden" onClick={() => setOpen(!open)}>☰</button>
           <ul className={`md:flex gap-4 ${open ? 'block' : 'hidden'} md:block`}>
             {navItems.map((item) => (
-              <li key={item}><a href={`#${item}`} onClick={() => setOpen(false)} className={`${active === item ? 'text-[#6c63ff]' : 'text-gray-300'}`}>{item}</a></li>
+              <li key={item}><a href={`#${item}`} onClick={() => setOpen(false)} className={`nav-link ${active === item ? 'text-[#8f88ff]' : 'text-gray-300'}`}>{item}</a></li>
             ))}
           </ul>
         </div>
@@ -91,7 +156,7 @@ export default function App() {
 
       <Section id="Hero" className="flex items-center justify-center text-center">
         <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-          <div className="mx-auto mb-4 h-28 w-28 rounded-full border-2 border-[#6c63ff] bg-gray-900" />
+          <div className="profile-ring mx-auto mb-4 h-28 w-28 rounded-full" />
           <h1 className="text-4xl md:text-6xl font-bold">Data Engineer & Analytics Builder</h1>
           <p className="mt-4 text-gray-300 max-w-2xl">I build scalable data products, analytics platforms, and insightful dashboards.</p>
           <div className="mt-6 flex justify-center gap-4">
@@ -104,7 +169,7 @@ export default function App() {
       <Section id="About">
         <h2 className="mb-4 text-3xl font-semibold">About</h2>
         <p className="mb-8 max-w-3xl text-gray-300">I focus on end-to-end data workflows—from ingestion and transformation to visualization and business impact. My work combines engineering rigor with product thinking.</p>
-        <div className="grid gap-4 md:grid-cols-3">{stats.map((s) => <Card key={s.label}><p className="text-3xl font-bold text-[#6c63ff]">{s.value}</p><p className="text-gray-300">{s.label}</p></Card>)}</div>
+        <div className="grid gap-4 md:grid-cols-3">{stats.map((s) => <Card key={s.label}><p className="text-3xl font-bold text-[#8f88ff]">{s.value}</p><p className="text-gray-300">{s.label}</p></Card>)}</div>
       </Section>
 
       <Section id="Skills">
@@ -127,9 +192,17 @@ export default function App() {
 
       <Section id="Projects">
         <h2 className="mb-4 text-3xl font-semibold">Projects</h2>
-        <div className="mb-6 flex flex-wrap gap-2">{['All', 'React', 'Python', 'Node.js'].map((t) => <button key={t} onClick={() => setFilter(t)} className={`rounded px-4 py-2 ${filter === t ? 'bg-[#6c63ff]' : 'bg-gray-800'}`}>{t}</button>)}</div>
+        <div className="mb-6 flex flex-wrap gap-2">{projectTags.map((t) => <button key={t} onClick={() => setFilter(t)} className={`project-filter rounded px-4 py-2 ${filter === t ? 'bg-[#6c63ff]' : 'bg-gray-800'}`}>{t}</button>)}</div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {filteredProjects.map((p) => <Card key={p.title}><h3 className="text-xl font-semibold">{p.title}</h3><p className="my-2 text-sm text-[#6c63ff]">{p.tag}</p><div className="flex flex-wrap gap-2">{p.tech.map((x) => <span key={x} className="rounded bg-gray-800 px-2 py-1 text-xs">{x}</span>)}</div></Card>)}
+          {filteredProjects.map((p) => (
+            <Card key={p.title} className="project-card h-full">
+              <div className="mb-3 inline-flex rounded-full border border-[#6c63ff]/50 px-3 py-1 text-xs text-[#a8a3ff]">{p.tag}</div>
+              <h3 className="text-xl font-semibold">{p.title}</h3>
+              <p className="my-3 text-sm text-gray-300">{p.impact}</p>
+              <div className="flex flex-wrap gap-2">{p.tech.map((x) => <span key={x} className="rounded bg-gray-800 px-2 py-1 text-xs">{x}</span>)}</div>
+              <a className="mt-4 inline-block text-sm font-medium text-[#8f88ff] underline-offset-4 hover:underline" href={p.repo} target="_blank" rel="noreferrer">View Repository ↗</a>
+            </Card>
+          ))}
         </div>
       </Section>
 
@@ -174,5 +247,14 @@ function Section({ id, children, className = '' }) {
 }
 
 function Card({ children, className = '' }) {
-  return <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className={`glass rounded-xl p-5 transition hover:-translate-y-1 ${className}`}>{children}</motion.div>
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className={`glass rounded-xl p-5 transition duration-300 hover:-translate-y-1 hover:shadow-[0_10px_35px_rgba(108,99,255,0.25)] ${className}`}
+    >
+      {children}
+    </motion.div>
+  )
 }
