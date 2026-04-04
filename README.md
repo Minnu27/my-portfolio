@@ -1,20 +1,26 @@
-# Manish Chowdary Gorantla - Data Portfolio
+# Manish Chowdary Portfolio (React + Vite)
 
-Multi-page portfolio website for Data Engineering, Data Science, and Data Analytics work.
+A modern single-page portfolio built with React + Vite featuring:
 
-## Pages
-
-- `index.html` - Homepage with profile, interests, and featured work
-- `about.html` - Background, education, and competencies
-- `projects.html` - Dedicated project sections (Data Engineer / Scientist / Analyst)
-- `experience.html` - Professional timeline
-- `visualizations.html` - Interactive charts
-- `contact.html` - Contact details and form
+- Sticky navbar with active section highlighting
+- 7 sections: Hero, About, Skills, Projects, Experience, Education, Contact
+- Framer Motion animations
+- Recharts radar + bar visualizations
+- Filterable projects by stack
+- Mobile hamburger navigation
+- Dark glassmorphism UI
 
 ## Run locally
 
 ```bash
-python3 -m http.server 8000
+npm install
+npm run dev
 ```
 
-Then open <http://localhost:8000>.
+## Build
+
+```bash
+npm run build
+```
+
+> Update content in `src/App.jsx` arrays (`skillBars`, `projects`, `experience`, `education`) to match your latest resume/chat specs.
