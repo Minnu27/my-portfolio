@@ -1,12 +1,53 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Manish Chowdary | Portfolio</title>
+    
+    <!-- Title -->
+    <title>Manish Chowdary Gorantla | Portfolio - Data Scientist & Analytics Engineer</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Portfolio of Manish Chowdary Gorantla - Graduate Data Science student at Pace University. Expert in Data Engineering, Machine Learning pipelines, NLP assistant design, and interactive decision systems." />
+    <meta name="keywords" content="Manish Chowdary Gorantla, Data Science, Data Engineer, Machine Learning, Python, SQL, Snowflake, Tableau, Pace University, Portfolio, developer" />
+    <meta name="author" content="Manish Chowdary Gorantla" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Manish Chowdary Gorantla | Data Scientist & Analytics Engineer" />
+    <meta property="og:description" content="Explore projects in Machine Learning, Cloud ETL, and Data Analytics dashboards." />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (via CDN) -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              display: ['Outfit', 'sans-serif'],
+              mono: ['Space Grotesk', 'monospace'],
+            },
+            colors: {
+              brand: {
+                dark: '#030014',
+                purple: '#8b5cf6',
+                blue: '#06b6d4',
+                magenta: '#ec4899',
+                soft: '#c7c3ff'
+              }
+            }
+          }
+        }
+      }
+    </script>
   </head>
-  <body class="bg-[#0a0a0a]">
+  <body class="bg-[#030014] text-white antialiased selection:bg-[#8b5cf6]/30 selection:text-white overflow-x-hidden">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
