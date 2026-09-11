@@ -18,8 +18,122 @@ import {
   Legend
 } from 'recharts'
 import techAvatar from './tech_avatar.png'
+import healthRecordPreview from './project-images/health-record-preview.png'
 
 const navItems = ['Hero', 'About', 'Skills', 'Playground', 'Projects', 'Experience', 'Education', 'Contact']
+
+// Lightweight inline icon set for project cards that don't have a real screenshot.
+// Kept as line-art SVGs (no external images) so they load instantly, never rot,
+// and match the existing purple/cyan glassmorphism theme.
+const ICON_PATHS = {
+  meditrace: (
+    <>
+      <path d="M7 3.5h7l3.5 3.5V20a1 1 0 01-1 1H7a1 1 0 01-1-1V4.5a1 1 0 011-1z" />
+      <path d="M14 3.5V7a1 1 0 001 1h3.5" />
+      <path d="M8.5 13.5h2l1.2-2.4 1.6 4.8 1.2-2.4h1.5" />
+    </>
+  ),
+  chatbot: (
+    <>
+      <path d="M4 5.5h16a1 1 0 011 1V15a1 1 0 01-1 1H9l-4 3.5V16H4a1 1 0 01-1-1V6.5a1 1 0 011-1z" />
+      <circle cx="8.5" cy="10.5" r="0.9" fill="currentColor" stroke="none" />
+      <circle cx="12" cy="10.5" r="0.9" fill="currentColor" stroke="none" />
+      <circle cx="15.5" cy="10.5" r="0.9" fill="currentColor" stroke="none" />
+    </>
+  ),
+  network: (
+    <>
+      <circle cx="12" cy="4.5" r="2" />
+      <circle cx="5" cy="15" r="2" />
+      <circle cx="19" cy="15" r="2" />
+      <circle cx="12" cy="20.5" r="1.6" />
+      <path d="M12 6.5L6.2 13.3M12 6.5l5.8 6.8M6.6 16.6l4.3 2.7M17.4 16.6l-4.3 2.7" />
+    </>
+  ),
+  sentiment: (
+    <>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M8.5 10.2h.01M15.5 10.2h.01" strokeWidth="2.4" />
+      <path d="M8 15c1.2 1.3 2.6 2 4 2s2.8-.7 4-2" />
+    </>
+  ),
+  shield: (
+    <>
+      <path d="M12 3l7 3v5.5c0 4.6-3 8.3-7 9.5-4-1.2-7-4.9-7-9.5V6l7-3z" />
+      <path d="M9 12.2l2 2 4-4.4" />
+    </>
+  ),
+  flood: (
+    <>
+      <path d="M3 15c1.5-1.5 3-1.5 4.5 0s3 1.5 4.5 0 3-1.5 4.5 0 3 1.5 4.5 0" />
+      <path d="M3 19c1.5-1.5 3-1.5 4.5 0s3 1.5 4.5 0 3-1.5 4.5 0 3 1.5 4.5 0" />
+      <path d="M12 3v8.5M9 8.5l3 3 3-3" />
+    </>
+  ),
+  taxi: (
+    <>
+      <path d="M5 16.5V12l1.6-4.2A2 2 0 018.5 6.5h7a2 2 0 011.9 1.3L19 12v4.5" />
+      <path d="M4 16.5h16v2.2a.8.8 0 01-.8.8h-1.4a.8.8 0 01-.8-.8v-1.2H7v1.2a.8.8 0 01-.8.8H4.8a.8.8 0 01-.8-.8v-2.2z" />
+      <circle cx="8" cy="16.2" r="1.1" fill="currentColor" stroke="none" />
+      <circle cx="16" cy="16.2" r="1.1" fill="currentColor" stroke="none" />
+      <path d="M9 6.5V4.5h6v2" />
+    </>
+  ),
+  traffic: (
+    <>
+      <rect x="9" y="2.5" width="6" height="15" rx="2" />
+      <circle cx="12" cy="6" r="1" fill="currentColor" stroke="none" />
+      <circle cx="12" cy="10" r="1" fill="currentColor" stroke="none" />
+      <circle cx="12" cy="14" r="1" fill="currentColor" stroke="none" />
+      <path d="M12 17.5V21M8 21h8" />
+    </>
+  ),
+  churn: (
+    <>
+      <circle cx="9" cy="8.5" r="3" />
+      <path d="M3.5 20c0-3.3 2.5-5.5 5.5-5.5s5.5 2.2 5.5 5.5" />
+      <path d="M16 9.5l2 2 3.5-4" />
+    </>
+  ),
+}
+
+function ProjectIcon({ name, className }) {
+  const path = ICON_PATHS[name]
+  if (!path) return null
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      {path}
+    </svg>
+  )
+}
+
+function ProjectMedia({ project }) {
+  if (project.image) {
+    return (
+      <div className="h-36 w-full overflow-hidden rounded-xl mb-4 border border-white/5 bg-slate-950">
+        <img
+          src={project.image}
+          alt={`${project.title} preview`}
+          className="h-full w-full object-cover object-top opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+        />
+      </div>
+    )
+  }
+  return (
+    <div className="h-36 w-full rounded-xl mb-4 border border-white/5 bg-gradient-to-br from-violet-500/10 via-slate-950 to-cyan-500/10 flex items-center justify-center relative overflow-hidden">
+      <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_30%_30%,#8b5cf6,transparent_60%)]" />
+      <ProjectIcon name={project.icon} className="h-14 w-14 text-[#c7c3ff] group-hover:text-cyan-300 group-hover:scale-110 transition-all duration-500 relative z-10" />
+    </div>
+  )
+}
 
 const stats = [
   { label: 'Academic GPA', value: '3.9 / 4.0', sub: 'Pace University MS' },
@@ -41,10 +155,10 @@ const skillCategories = {
     { name: 'MongoDB / NoSQL', level: 84 }
   ],
   mlAi: [
-    { name: 'GenAI & NLP Systems', level: 88 },
+    { name: 'GenAI & LLM APIs', level: 88 },
+    { name: 'Multi-Agent Systems', level: 85 },
     { name: 'Machine Learning Models', level: 90 },
-    { name: 'Scikit-learn / Pandas', level: 92 },
-    { name: 'AI Model Evaluation', level: 85 }
+    { name: 'Prompt Engineering / RAG', level: 84 }
   ],
   visualizations: [
     { name: 'Tableau', level: 90 },
@@ -74,64 +188,169 @@ const barData = [
 
 const projects = [
   {
-    title: 'Cloud ETL Migration & Validation Framework',
-    tag: 'Data Engineering',
-    tech: ['Python', 'SQL', 'AWS', 'Snowflake', 'ETL'],
-    impact: 'Built scalable ingestion and validation pipelines with synthetic test datasets, reducing model defects by 25% and improving pipeline delivery reliability.',
+    title: 'MediTrace AI — Evidence-Linked Clinical Record Extraction',
+    tag: 'AI & Research',
+    tech: ['Python', 'FastAPI', 'SQLAlchemy', 'PostgreSQL', 'LLM Gateway'],
+    impact: 'An evidence-first workspace that turns synthetic, de-identified clinical documents into reviewable, evidence-linked patient timelines — a decision-support research prototype, not a diagnostic device.',
     details: [
-      'Designed structured ETL data paths mapping JSON/NoSQL sources to structured relational schemas.',
-      'Developed automated validation scripts checking schema conformity, null counts, and column types.',
-      'Deployed AWS-based notifications and alerts for pipeline execution failures.'
+      'Built a FastAPI service with document upload and source retrieval behind a schema-validated "fact" contract carrying value, unit, reference range, date, and page/line/quote evidence coordinates.',
+      'Added SHA-256 source fingerprints, background extraction workers, and an OpenAI-compatible MedGemma gateway that only submits text on an explicit, per-document basis.',
+      'Deployed as a serverless FastAPI function on Vercel with SQLite for local demos and a durable Postgres backend for persistence.'
     ],
-    repo: 'https://github.com/Manishchowdary/cloud-etl-migration-validation'
+    repo: 'https://github.com/Minnu27/CXR-sentinal',
+    icon: 'meditrace'
   },
   {
-    title: 'Flood Prediction using Machine Learning',
-    tag: 'Machine Learning',
-    tech: ['Python', 'Scikit-learn', 'Pandas', 'Matplotlib', 'ML'],
-    impact: 'Improved predictive classification using environmental datasets with careful feature engineering and ensemble model tuning.',
+    title: 'Ted — Advanced AI Wingman',
+    tag: 'GenAI Apps',
+    tech: ['Next.js 14', 'React', 'TypeScript', 'Gemini API'],
+    impact: 'A conversational AI companion with switchable personas and mood-aware replies, rebuilt from an early Streamlit prototype into a production-style Next.js app.',
     details: [
-      'Processed historical climate, rainfall, and terrain elevation datasets using Pandas.',
-      'Optimized hyperparameters using Random Forests and Gradient Boosted Trees, raising accuracy by 14%.',
-      'Created diagnostic visualizations illustrating feature importance and ROC-AUC curves.'
+      'Implemented six dynamic personas (Bestie, Guardian, Cheerleader, Sage, Realist, Coder) with persona-specific prompting and tone.',
+      'Routed all Gemini API calls through a server-side Next.js API route so keys never reach the browser, plus a basic sentiment-signal badge on incoming messages.',
+      'Shipped a responsive, glassmorphism chat UI with quick-prompt chips, configured for one-click Vercel deployment.'
     ],
-    repo: 'https://github.com/Manishchowdary/flood-prediction-ml'
+    repo: 'https://github.com/Minnu27/Ted--A-chatbot',
+    icon: 'chatbot'
+  },
+  {
+    title: 'MAREN — Multi-Agent Responsive Embedding Network',
+    tag: 'AI & Research',
+    tech: ['Python', 'LLM APIs', 'Prompt Engineering', 'Multi-Agent Systems'],
+    impact: 'A multi-agent LLM framework studying how independent language-model agents adapt responses and decision-making when interacting with one another.',
+    details: [
+      "Designed structured, prompt-engineered scenarios in which multiple LLM agents respond to and adapt based on one another's outputs.",
+      'Framed and evaluated behavioral patterns across multi-agent interactions using a repeatable evaluation protocol.',
+      'Manuscript in preparation for IEEE submission.'
+    ],
+    status: 'IEEE submission in preparation',
+    icon: 'network'
+  },
+  {
+    title: 'Comparative Study of Emotional Dynamics in LLMs',
+    tag: 'AI & Research',
+    tech: ['Python', 'LLM Evaluation', 'NLP'],
+    impact: 'A comparative evaluation of emotional-response consistency across six emotion categories across multiple large language models.',
+    details: [
+      'Designed a structured evaluation protocol to probe emotional-response consistency across models and emotion categories.',
+      'Assembled results into a citation-backed manuscript prepared for IEEE submission.'
+    ],
+    status: 'IEEE submission in preparation',
+    icon: 'sentiment'
   },
   {
     title: 'Health Record Portal Analytics',
-    tag: 'Analytics',
-    tech: ['Tableau', 'Power BI', 'SQL', 'Python', 'BI'],
-    impact: 'Delivered role-based dashboards and operational views that improved hospital support visibility and user interaction.',
+    tag: 'Data Analytics',
+    tech: ['Tableau', 'Power BI', 'SQL', 'Python'],
+    impact: 'An end-to-end BI project for a hospital patient-portal program: role-based dashboards, a tuned SQL warehouse, and an engagement/disengagement-risk scoring layer on a reproducible synthetic dataset.',
     details: [
-      'Designed executive summaries and operational views showing active user engagement and patient participation.',
-      'Constructed complex SQL queries optimizing data retrieval for Tableau dashboards.',
-      'Collaborated with medical outreach teams to define key performance indicators and engagement goals.'
+      'Designed executive and operational dashboards showing active user engagement and patient participation.',
+      'Built a SQL warehouse (Postgres-flavored, SQLite for local runs) tuned for fast Tableau/Power BI extraction.',
+      'Layered on engagement scoring and disengagement-risk modeling using pandas and scikit-learn.'
     ],
-    repo: 'https://github.com/Manishchowdary/healthcare-record-analytics'
+    repo: 'https://github.com/Minnu27/Health-Record-Portal-Analytics',
+    image: healthRecordPreview
+  },
+  {
+    title: 'Car Insurance Fraud Detection',
+    tag: 'Machine Learning',
+    tech: ['Python', 'Random Forest', 'XGBoost', 'Tableau'],
+    impact: 'A fraud-detection system for auto insurance claims, combining ensemble classifiers with custom validation pipelines to surface high-risk claims.',
+    details: [
+      'Trained and compared Random Forest and XGBoost classifiers on multi-source claims data.',
+      'Built ETL and validation pipelines to evaluate model outputs and statistically identify key risk features.',
+      'Delivered interactive Tableau dashboards to visualize fraud patterns for stakeholders.'
+    ],
+    icon: 'shield'
+  },
+  {
+    title: 'Flood Prediction Using Machine Learning',
+    tag: 'Machine Learning',
+    tech: ['Python', 'Scikit-learn', 'Pandas', 'Matplotlib'],
+    impact: 'Predictive classification models for flood risk built on large-scale environmental datasets, with a focus on clean feature engineering.',
+    details: [
+      'Developed Logistic Regression, Decision Tree, and SVM classification models on environmental and climate data.',
+      'Cleaned and transformed raw unstructured data into analysis-ready formats to improve training accuracy.',
+      'Communicated outcomes through Power BI dashboards and Matplotlib/Seaborn visualizations.'
+    ],
+    icon: 'flood'
+  },
+  {
+    title: 'NYC Congestion Pricing (MTA CRZ) — EDA',
+    tag: 'Data Analytics',
+    tech: ['Python', 'Pandas', 'Folium', 'Seaborn'],
+    impact: "An exploratory analysis of NYC's Congestion Relief Zone traffic data, surfacing congestion patterns and toll-avoidance behavior to inform policy design.",
+    details: [
+      'Analyzed hourly/daily traffic patterns and vehicle-class usage trends across the CRZ dataset.',
+      'Quantified peak vs. overnight traffic behavior and CRZ vs. excluded-roadway toll-avoidance ratios by region.',
+      'Built interactive Folium maps of bridge/tunnel load and the most congested entry points.'
+    ],
+    repo: 'https://github.com/Minnu27/MTA_congestion_pricing_EDA',
+    icon: 'traffic'
+  },
+  {
+    title: 'NYC Yellow Taxi 2020 — EDA',
+    tag: 'Data Analytics',
+    tech: ['Python', 'ydata-profiling', 'Pandas'],
+    impact: 'An exploratory study of 2020 NYC Yellow Taxi trip data (Jan / Mar / May) to identify the factors that most affect ride-time prediction.',
+    details: [
+      'Used ydata-profiling alongside classic EDA to rapidly surface data quality issues and distributional shifts across months.',
+      'Studied pickup/drop-off, distance, and time-of-day factors as candidate features for ride-time prediction.'
+    ],
+    repo: 'https://github.com/Minnu27/NY-Yellow-Taxi-EDA',
+    icon: 'taxi'
+  },
+  {
+    title: 'Customer Churn Prediction (BCG X Job Simulation)',
+    tag: 'Machine Learning',
+    tech: ['Python', 'Random Forest', 'Scikit-learn'],
+    impact: 'A completed BCG X Data Science job simulation (Forage): predicting customer churn for a fictional energy client and translating the model into a stakeholder-ready recommendation.',
+    details: [
+      'Performed EDA and feature engineering on customer and usage data for a fictional energy client (PowerCo).',
+      'Built a Random Forest classifier to predict customer-level churn risk.',
+      'Communicated findings in a PDF executive summary using the SCQA (Situation-Complication-Question-Answer) framework.'
+    ],
+    repo: 'https://github.com/Minnu27/customer-churn-prediction',
+    icon: 'churn'
   }
 ]
 
 const experience = [
   {
     role: 'Data Science Intern',
-    company: 'Data Science Center',
+    company: 'DigitalLync — Hyderabad, India',
     period: 'Jul 2024 — Nov 2024',
     details: [
-      'Built an R&D GenAI and NLP-driven assistant to support team operations, accelerating internal query responses.',
-      'Constructed and processed 1M+ structured and unstructured records from PDFs, Snowflake, and NoSQL sources.',
-      'Trained and evaluated multiple ML models, boosting predictive accuracy by ~20% and reducing false positives by ~10%.',
+      'Conducted R&D on machine learning and NLP-driven solutions, implementing algorithms to improve operational efficiency and support data-driven decision making.',
+      'Collected, cleaned, and integrated 1M+ structured/unstructured records and 500K+ data points from SQL, Snowflake, NoSQL, and AWS S3 sources, improving decision-making insights by ~15%.',
+      'Trained and evaluated multiple ML models, boosting predictive accuracy by ~20% and reducing false positives by ~10%, and visualized results through 10+ Tableau/Power BI dashboards.',
       'Enhanced NLP pipelines to analyze 10K+ documents, improving sentiment analysis accuracy by ~18%.'
     ]
   },
   {
-    role: 'Team Lead (Major Project)',
+    role: 'Team Lead — Major Project (Health Record Portal Analytics)',
     company: 'Guru Nanak Institute of Technology',
     period: 'Nov 2023 — Apr 2024',
     details: [
-      'Led a team of five developers to design and build a full-stack, data-driven platform.',
-      'Defined secure system architecture with compliance-focused design principles.',
-      'Developed distributed backend framework and coordinated product + design collaboration.'
+      'Led a team of five developers to design and build a full-stack, data-driven health-record platform, improving system performance and accessibility by ~40%.',
+      'Defined a secure, compliance-focused system architecture aligned with industry-standard data protection requirements.',
+      'Developed a distributed backend framework and coordinated with product and design teams, increasing end-user adoption by ~50%.'
     ]
+  }
+]
+
+const certifications = [
+  {
+    title: 'BCG X Data Science Job Simulation',
+    issuer: 'Forage',
+    text: 'EDA, feature engineering, and a Random Forest churn-prediction model for a fictional energy client, with findings delivered via an SCQA executive summary.',
+    link: 'https://github.com/Minnu27/customer-churn-prediction'
+  },
+  {
+    title: 'British Airways Data Science Job Simulation',
+    issuer: 'Forage',
+    text: 'Completed a data science simulation focused on customer behavior analysis for a global airline.',
+    link: null
   }
 ]
 
@@ -152,7 +371,7 @@ const education = [
 const roles = [
   'Data Scientist',
   'Analytics Engineer',
-  'Data Pipeline Architect',
+  'GenAI / Agentic AI Builder',
   'Pace University Grad Student'
 ]
 
@@ -430,7 +649,7 @@ export default function App() {
             </p>
 
             <p className="mt-4 text-gray-400 max-w-2xl text-base md:text-lg leading-relaxed mx-auto">
-              Master of Science in Data Science Candidate at Pace University (GPA 3.9). Specializing in production data engineering, automated ML pipelines, NLP design, and interactive decision dashboards.
+              Master of Science in Data Science Candidate at Pace University (GPA 3.9). Building multi-agent LLM systems, GenAI apps, production data pipelines, and interactive decision dashboards — with two IEEE-bound research papers on LLM behavior.
             </p>
 
             {/* CTAs */}
@@ -453,9 +672,9 @@ export default function App() {
             <div className="mt-12 flex justify-center gap-6 items-center flex-wrap opacity-60 hover:opacity-90 transition-opacity duration-300">
               <span className="text-xs font-mono">⚡ Python</span>
               <span className="text-xs font-mono">⚡ SQL</span>
+              <span className="text-xs font-mono">⚡ LLM APIs</span>
+              <span className="text-xs font-mono">⚡ Multi-Agent Systems</span>
               <span className="text-xs font-mono">⚡ Snowflake</span>
-              <span className="text-xs font-mono">⚡ AWS</span>
-              <span className="text-xs font-mono">⚡ ML/NLP</span>
               <span className="text-xs font-mono">⚡ Tableau</span>
             </div>
           </motion.div>
@@ -797,6 +1016,7 @@ export default function App() {
                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-violet-500 to-cyan-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
 
                 <div>
+                  <ProjectMedia project={p} />
                   <span className="inline-block px-3 py-1 rounded-full text-[10px] font-mono font-semibold bg-[#8b5cf6]/10 text-[#c7c3ff] border border-[#8b5cf6]/20 mb-4 uppercase">
                     {p.tag}
                   </span>
@@ -826,17 +1046,23 @@ export default function App() {
                       </span>
                     ))}
                   </div>
-                  <a
-                    href={p.repo}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-xs font-semibold text-[#06b6d4] hover:underline flex items-center gap-1 group-hover:translate-x-1 transition-transform"
-                  >
-                    Repo
-                    <svg className="w-3 h-3 fill-current" viewBox="0 0 24 24">
-                      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                    </svg>
-                  </a>
+                  {p.repo ? (
+                    <a
+                      href={p.repo}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-xs font-semibold text-[#06b6d4] hover:underline flex items-center gap-1 group-hover:translate-x-1 transition-transform"
+                    >
+                      Repo
+                      <svg className="w-3 h-3 fill-current" viewBox="0 0 24 24">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                      </svg>
+                    </a>
+                  ) : p.status ? (
+                    <span className="text-[10px] font-mono text-amber-300/80 bg-amber-400/10 border border-amber-400/20 px-2.5 py-1 rounded-full">
+                      {p.status}
+                    </span>
+                  ) : null}
                 </div>
               </motion.div>
             ))}
@@ -910,6 +1136,27 @@ export default function App() {
             </div>
           ))}
         </div>
+
+        {/* Certifications / Job Simulations strip */}
+        <div className="mt-8">
+          <span className="text-xs uppercase tracking-widest text-gray-500 font-mono mb-3 block">Certifications & Job Simulations</span>
+          <div className="grid gap-4 md:grid-cols-2">
+            {certifications.map((c) => (
+              <div key={c.title} className="glass-card rounded-xl p-5 border border-white/5">
+                <div className="flex items-start justify-between gap-3">
+                  <h4 className="font-display font-semibold text-white text-sm leading-snug">{c.title}</h4>
+                  <span className="text-[9px] font-mono uppercase text-[#c7c3ff] bg-[#8b5cf6]/10 border border-[#8b5cf6]/20 px-2 py-0.5 rounded-full shrink-0">{c.issuer}</span>
+                </div>
+                <p className="text-xs text-gray-400 mt-2 leading-relaxed font-light">{c.text}</p>
+                {c.link && (
+                  <a href={c.link} target="_blank" rel="noreferrer" className="text-[11px] font-semibold text-[#06b6d4] hover:underline mt-3 inline-block">
+                    View repo →
+                  </a>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* 8. CONTACT SECTION */}
@@ -943,8 +1190,8 @@ export default function App() {
                   <span className="h-9 w-9 rounded-lg bg-white/5 border border-white/5 flex items-center justify-center text-sm">📞</span>
                   <div>
                     <span className="text-[10px] text-gray-500 uppercase font-mono block">Phone</span>
-                    <a className="text-sm font-semibold text-[#06b6d4] hover:underline" href="tel:+16466300665">
-                      +1 (646) 630-0665
+                    <a className="text-sm font-semibold text-[#06b6d4] hover:underline" href="tel:+16466306065">
+                      +1 (646) 630-6065
                     </a>
                   </div>
                 </div>
@@ -962,7 +1209,7 @@ export default function App() {
             <div className="glass-card rounded-2xl p-6 border border-white/5 flex flex-col justify-between">
               <span className="text-xs uppercase text-gray-500 font-mono block mb-2">Preferred Stack</span>
               <div className="flex flex-wrap gap-1.5">
-                {['Python', 'SQL', 'Snowflake', 'AWS', 'Tableau', 'Power BI', 'NoSQL', 'ETL', 'Docker', 'NLP'].map((s) => (
+                {['Python', 'SQL', 'LLM APIs', 'Multi-Agent Systems', 'Snowflake', 'AWS', 'Tableau', 'Power BI', 'ETL', 'NLP'].map((s) => (
                   <span key={s} className="text-xs font-mono px-3 py-1 bg-slate-950 border border-white/5 rounded-full text-[#c7c3ff]">
                     {s}
                   </span>
@@ -1067,7 +1314,7 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p>© {new Date().getFullYear()} Manish Chowdary Gorantla. All rights reserved.</p>
           <div className="flex gap-4">
-            <a href="https://github.com/Manishchowdary" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">GitHub</a>
+            <a href="https://github.com/Minnu27" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">GitHub</a>
             <a href="https://www.linkedin.com/in/manishchowdary" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">LinkedIn</a>
           </div>
         </div>
