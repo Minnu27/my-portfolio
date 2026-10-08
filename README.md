@@ -9,6 +9,8 @@ A modern single-page portfolio built with React + Vite featuring:
 - Filterable projects by stack
 - Mobile hamburger navigation
 - Dark glassmorphism UI
+- Cinematic 3D intro (three.js, `src/Intro3D.jsx`): a particle cloud morphs through six resume chapters (name, education, data engineering, ML, GenAI, call to action) while the camera flies through. Plays once per session, skippable, disabled for reduced-motion users, code-split and replayable from the hero
+- Scroll progress bar and "New" badges on the latest projects (HumanProof, Cloud ETL Validation Framework, MediTrace)
 
 ## Run locally
 
