@@ -1,5 +1,5 @@
-import { useMemo, useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useMemo, useState, useEffect, lazy, Suspense } from 'react'
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion'
 import {
   RadarChart,
   Radar,
@@ -17,6 +17,8 @@ import {
   Line,
   Legend
 } from 'recharts'
+// three.js is code-split so it never delays first paint of the portfolio itself
+const Intro3D = lazy(() => import('./Intro3D.jsx'))
 import techAvatar from './tech_avatar.png'
 import healthRecordPreview from './project-images/health-record-preview.png'
 
@@ -55,6 +57,22 @@ const ICON_PATHS = {
       <circle cx="12" cy="12" r="8.5" />
       <path d="M8.5 10.2h.01M15.5 10.2h.01" strokeWidth="2.4" />
       <path d="M8 15c1.2 1.3 2.6 2 4 2s2.8-.7 4-2" />
+    </>
+  ),
+  etl: (
+    <>
+      <ellipse cx="6" cy="6" rx="3" ry="1.6" />
+      <path d="M3 6v5c0 .9 1.3 1.6 3 1.6s3-.7 3-1.6V6" />
+      <path d="M10.5 9h3.5M12.5 7l2 2-2 2" />
+      <path d="M15 14.5h6M15 18h6M15 21h6M18 11v3.5" />
+      <rect x="14.5" y="3" width="6.5" height="6" rx="1" />
+    </>
+  ),
+  humanproof: (
+    <>
+      <path d="M12 3l7 3v5.5c0 4.6-3 8.3-7 9.5-4-1.2-7-4.9-7-9.5V6l7-3z" />
+      <circle cx="12" cy="10" r="2.2" />
+      <path d="M8.2 15.5c.9-1.6 2.2-2.4 3.8-2.4s2.9.8 3.8 2.4" />
     </>
   ),
   shield: (
@@ -137,7 +155,7 @@ function ProjectMedia({ project }) {
 
 const stats = [
   { label: 'Academic GPA', value: '3.9 / 4.0', sub: 'Pace University MS' },
-  { label: 'Major Projects Delivered', value: '10+', sub: 'ETL, ML, and Analytics' },
+  { label: 'Projects Delivered', value: '12+', sub: 'GenAI, ETL, ML, and Analytics' },
   { label: 'Data Volumes Managed', value: '1M+ Records', sub: 'Snowflake & SQL pipelines' }
 ]
 
@@ -188,16 +206,45 @@ const barData = [
 
 const projects = [
   {
-    title: 'MediTrace AI — Evidence-Linked Clinical Record Extraction',
+    title: 'HumanProof — Live-Human Verification Layer',
     tag: 'AI & Research',
-    tech: ['Python', 'FastAPI', 'SQLAlchemy', 'PostgreSQL', 'LLM Gateway'],
-    impact: 'An evidence-first workspace that turns synthetic, de-identified clinical documents into reviewable, evidence-linked patient timelines — a decision-support research prototype, not a diagnostic device.',
+    featured: true,
+    tech: ['FastAPI', 'React', 'Tauri', 'Capacitor', 'PyTorch', 'Ed25519'],
+    impact: 'A verification layer that answers "is a live human on the other end right now?" in about 45 seconds, fusing eye-tracking, motor-dynamics, and voice anti-spoofing checks into one signed decision.',
     details: [
-      'Built a FastAPI service with document upload and source retrieval behind a schema-validated "fact" contract carrying value, unit, reference range, date, and page/line/quote evidence coordinates.',
-      'Added SHA-256 source fingerprints, background extraction workers, and an OpenAI-compatible MedGemma gateway that only submits text on an explicit, per-document basis.',
-      'Deployed as a serverless FastAPI function on Vercel with SQLite for local demos and a durable Postgres backend for persistence.'
+      'Three checkpoints (eye movement on a random dot path, curve tracing, five-word voice challenge) are scored server-side with deepfake, synthetic-voice, and lip-sync detection fused into a single decision.',
+      'Issues 15-minute Ed25519 tokens with a published JWKS and per-app pseudonyms so relying parties can verify users without cross-service tracking; Python and Node SDKs included.',
+      'Ships one React codebase to web, desktop (Tauri), and mobile (Capacitor), with a weekly GitHub Actions retraining loop that opens a pull request only when a new model measurably beats the current one.'
     ],
-    repo: 'https://github.com/Minnu27/CXR-sentinal',
+    repo: 'https://github.com/Minnu27/humanproof',
+    icon: 'humanproof'
+  },
+  {
+    title: 'Cloud ETL Migration & Validation Framework',
+    tag: 'Data Engineering',
+    featured: true,
+    tech: ['Python', 'Snowflake', 'BigQuery', 'Redshift', 'PostgreSQL', 'Docker', 'CI'],
+    impact: 'A pluggable, config-driven framework that answers the question every migration needs answered before cutover: does the target data actually match the source?',
+    details: [
+      'Six built-in validators: schema diff, row count, row-level checksum reconciliation, statistical comparison, NULL counts, and duplicate-key detection.',
+      'Uniform connector interface across CSV, SQLite, PostgreSQL, MySQL, Snowflake, BigQuery, and Redshift, driven entirely by a YAML job file with env-var secrets.',
+      'Ships a CLI with CI-friendly exit codes plus console, JSON, CSV, and themed HTML reports, backed by a pytest suite and GitHub Actions CI.'
+    ],
+    repo: 'https://github.com/Minnu27/Cloud-ETL-Migration-Validation-Framework',
+    icon: 'etl'
+  },
+  {
+    title: 'MediTrace AI — Verifiable Clinical Record Extraction',
+    tag: 'AI & Research',
+    featured: true,
+    tech: ['Python', 'FastAPI', 'SQLAlchemy', 'PostgreSQL', 'Tesseract OCR', 'MedGemma'],
+    impact: 'An evidence-first workspace that turns synthetic, de-identified clinical documents into reviewable patient timelines where every fact and answer is tamper-evident — a decision-support research prototype, not a diagnostic device.',
+    details: [
+      'Facts carry page/line/quote evidence, source SHA-256, and extractor/model/prompt versions; a hash-chained audit log with Ed25519-signed Merkle anchors makes rewrites detectable and proofs checkable offline.',
+      'Deterministic trend, contradiction, and monitoring-gap flags plus evidence-grounded Q&A that cites fact IDs and answers "not enough evidence" instead of guessing.',
+      'OCR ingestion, role-based access, Fernet encryption at rest, background extraction workers, and an optional OpenAI-compatible MedGemma gateway; deployable on Vercel.'
+    ],
+    repo: 'https://github.com/Minnu27/Meditrace',
     icon: 'meditrace'
   },
   {
@@ -372,11 +419,28 @@ const roles = [
   'Data Scientist',
   'Analytics Engineer',
   'GenAI / Agentic AI Builder',
+  'Cloud ETL & Data Engineer',
   'Pace University Grad Student'
 ]
 
 export default function App() {
   const [active, setActive] = useState('Hero')
+  // 3D intro plays once per browser session (and never for reduced-motion users); the hero button replays it
+  const [showIntro, setShowIntro] = useState(() => {
+    try {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false
+      return !sessionStorage.getItem('introSeen')
+    } catch {
+      return false
+    }
+  })
+  const { scrollYProgress } = useScroll()
+  const progressX = useSpring(scrollYProgress, { stiffness: 120, damping: 24 })
+  const closeIntro = () => {
+    try { sessionStorage.setItem('introSeen', '1') } catch { /* ignore */ }
+    setShowIntro(false)
+    window.scrollTo(0, 0)
+  }
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [projectFilter, setProjectFilter] = useState('All')
   const [selectedSkillTab, setSelectedSkillTab] = useState('languages')
@@ -530,6 +594,12 @@ export default function App() {
 
   return (
     <div className="bg-[#030014] text-gray-100 aurora-bg min-h-screen">
+      {showIntro && (
+        <Suspense fallback={<div className="fixed inset-0 z-[100] bg-[#030014]" />}>
+          <Intro3D onDone={closeIntro} />
+        </Suspense>
+      )}
+      <motion.div style={{ scaleX: progressX }} className="fixed top-0 left-0 right-0 h-0.5 origin-left z-[60] bg-gradient-to-r from-violet-500 to-cyan-400" />
       {/* Radial glows in the background */}
       <div className="radial-glow glow-purple top-[20%] left-[10%]" />
       <div className="radial-glow glow-cyan top-[60%] right-[5%]" />
@@ -666,6 +736,12 @@ export default function App() {
               >
                 Contact Me
               </a>
+              <button
+                onClick={() => setShowIntro(true)}
+                className="rounded-full border border-cyan-400/30 bg-cyan-400/5 hover:bg-cyan-400/10 text-cyan-200 font-semibold px-8 py-3.5 transition-all duration-300 hover:scale-105"
+              >
+                ▶ Replay 3D Intro
+              </button>
             </div>
 
             {/* Quick Tech Badge Badges */}
@@ -1017,9 +1093,16 @@ export default function App() {
 
                 <div>
                   <ProjectMedia project={p} />
-                  <span className="inline-block px-3 py-1 rounded-full text-[10px] font-mono font-semibold bg-[#8b5cf6]/10 text-[#c7c3ff] border border-[#8b5cf6]/20 mb-4 uppercase">
-                    {p.tag}
-                  </span>
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="inline-block px-3 py-1 rounded-full text-[10px] font-mono font-semibold bg-[#8b5cf6]/10 text-[#c7c3ff] border border-[#8b5cf6]/20 uppercase">
+                      {p.tag}
+                    </span>
+                    {p.featured && (
+                      <span className="inline-block px-3 py-1 rounded-full text-[10px] font-mono font-semibold bg-cyan-400/10 text-cyan-300 border border-cyan-400/20 uppercase">
+                        New
+                      </span>
+                    )}
+                  </div>
                   <h3 className="font-display font-bold text-xl text-white group-hover:text-[#06b6d4] transition-colors duration-300 leading-snug">
                     {p.title}
                   </h3>

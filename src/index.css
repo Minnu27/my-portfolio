@@ -197,3 +197,10 @@ section {
   padding: 10px 14px !important;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
 }
+
+/* 3D intro captions */
+@keyframes introCaption {
+  from { opacity: 0; transform: translateY(14px); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+.intro-caption { animation: introCaption 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
